@@ -2,10 +2,10 @@ using System;
 
 int SearchInsert(int[] nums, int target) {
         
-    return binarySearch(nums, target, 0, nums.Length - 1);
+    return BinarySearch(nums, target, 0, nums.Length - 1);
 }
 
-int binarySearch(int[] nums, int target, int low, int high)
+int BinarySearch(int[] nums, int target, int low, int high)
 {
     var mid = (low + high) / 2;
     
@@ -28,10 +28,10 @@ int binarySearch(int[] nums, int target, int low, int high)
     }
     else if(nums[mid] > target)
     {
-        return binarySearch(nums, target, low, --mid);
+        return BinarySearch(nums, target, low, --mid);
     }
     else
     {
-        return binarySearch(nums, target, ++mid, high);
+        return BinarySearch(nums, target, ++mid, high);
     }
 }
