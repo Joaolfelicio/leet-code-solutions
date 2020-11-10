@@ -18,6 +18,6 @@ public int FindNumbers(int[] nums, int p1, int count)
     {
         count++;
     }
-       
+    in   
     return FindNumbers(nums, ++p1, count);
 }
