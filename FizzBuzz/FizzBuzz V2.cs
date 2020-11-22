@@ -20,7 +20,7 @@ public class Solution {
                 result += "Buzz";
             }
             
-            if(i % 3 != 0 && i % 5 != 0)
+            if(String.IsNullOrEmpty(result))
             {
                 result = i.ToString();
             }
