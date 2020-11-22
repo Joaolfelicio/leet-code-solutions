@@ -100,7 +100,7 @@ class DoublyLinkedList {
             
         } else if(index == length - 1) {
             
-            var prevTail = getNode(length - 2);
+            var prevTail = tail.prev;
             
             prevTail.next = null;
             
