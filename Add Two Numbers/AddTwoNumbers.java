@@ -16,75 +16,26 @@ class Solution {
         
         ListNode dummyNode = new ListNode();
         ListNode current = dummyNode;
-        int rest = 0;
+        ListNode currL1 = l1;
+        ListNode currL2 = l2;
+        int carry = 0;
         
-        while(l1 != null || l2 != null || rest > 0) {
-             
-            if(l1 == null && l2 == null) {
-                current.next = new ListNode(rest);
-                rest--;   
-                
-            }
-            else if(l1 == null) {
-                int newVal = l2.val;
-                
-                if(rest > 0) {
-                    newVal += rest;
-                    rest--;
-                }
-                
-                if(newVal > 9) {
-                    current.next = new ListNode(newVal % 10);
-                    rest++;
-                }
-                else {
-                    current.next = new ListNode(newVal);
-                }
-                
-                l2 = l2.next;
-                
-            }
-            else if(l2 == null) {
-                int newVal = l1.val;
-                                
-                if(rest > 0) {
-                    newVal += rest;
-                    rest--;
-                }
-                
-                if(newVal > 9) {
-                    current.next = new ListNode(newVal % 10);
-                    rest++;
-                }
-                else {
-                    current.next = new ListNode(newVal);
-                }
-                
-                l1 = l1.next;
-                
-            }
-            else {
-                int newVal = l1.val + l2.val;
-                
-                if(rest > 0) {
-                    newVal += rest;
-                    rest--;
-                }
-                
-                if(newVal > 9) {
-                    current.next = new ListNode(newVal % 10);
-                    rest++;
-                }
-                else {
-                    current.next = new ListNode(newVal);
-                }
-                
-                l2 = l2.next;
-                l1 = l1.next;
-                
-            }
+        while(currL1 != null || currL2 != null) {
+                  
+            int l1Val = (currL1 != null) ? currL1.val : 0;
+            int l2Val = (currL2 != null) ? currL2.val : 0;
+            if (currL1 != null) currL1 = currL1.next;
+            if (currL2 != null) currL2 = currL2.next;
+
+            int sum = l1Val + l2Val + carry;
+            carry = sum / 10;
             
+            current.next = new ListNode(sum % 10);                     
             current = current.next;
+        }
+        
+        if(carry > 0) {
+            current.next = new ListNode(carry--);
         }
         
         return dummyNode.next;
