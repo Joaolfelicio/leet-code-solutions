@@ -1,5 +1,3 @@
-using System;
-
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -13,26 +11,24 @@ using System;
  *     }
  * }
  */
-
-TreeNode SearchBST(TreeNode root, int val) {
-    return SearchTree(root, val);        
-}
-    
-TreeNode SearchTree(TreeNode root, int val)
-{
-    if(root.val == val)
+public class Solution {
+    public TreeNode SearchBST(TreeNode root, int val) 
     {
-        return root;
+        return SearchTree(root, val);        
     }
     
-    if(root.val > val && root.left != null)
+    public TreeNode SearchTree(TreeNode root, int val)
     {
-        return SearchTree(root.left, val);
-    } 
-    else if(root.val < val && root.right != null)
-    {
-        return SearchTree(root.right, val);
+        if(root == null) return null;
+        if(root.val == val) return root;
+        
+        if(root.val > val) 
+        {
+            return SearchTree(root.left, val);
+        }
+        else
+        {
+            return SearchTree(root.right, val);
+        }
     }
-    
-    return null;
 }
