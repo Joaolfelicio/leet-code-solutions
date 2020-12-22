@@ -55,30 +55,34 @@ public class Solution {
 
 // Recursive BFS
 public class Solution2 {
-    
-    private TreeNode Ancestor = null;
-    
     public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) 
     {       
-        LowestCommonAncestorHelper(root, q, p);
-        return Ancestor;
+        return FindAncestor(root, q, p);
     }
     
-    private bool LowestCommonAncestorHelper(TreeNode currNode, TreeNode p, TreeNode q)
+    private TreeNode FindAncestor(TreeNode current, TreeNode q, TreeNode p)
     {
-        if(currNode == null) return false;
-        
-        int leftSide = LowestCommonAncestorHelper(currNode.left, q, p) ? 1 : 0;
-        
-        int rightSide = LowestCommonAncestorHelper(currNode.right, q, p) ? 1 : 0;
-        
-        int mid = (currNode == p || currNode == q) ? 1 : 0;
-        
-        if(mid + leftSide + rightSide >= 2)
+        if(current == null) return null;
+
+        if(current == q || current == p) return current;
+
+        var nodeLeft = FindAncestor(current.left, q, p);
+
+        var nodeRight = FindAncestor(current.right, q, p);
+
+        //If both are not null, we found the ancestor
+        if(nodeLeft != null && nodeRight != null) 
         {
-            Ancestor = currNode;
+            return current;
+        } 
+        else if(nodeLeft != null) 
+        {
+            return nodeLeft;
+        } 
+        else if(nodeRight != null) 
+        {
+            return nodeRight;
         }
-        
-        return (mid + leftSide + rightSide > 0);
+        return null;
     }
 }
