@@ -1,27 +1,39 @@
-using System;
-
-int NumIdenticalPairs(int[] nums) 
+public class Solution 
 {
-    return NumGoodPairs(nums, 0, 0, 1);
-}
-
-int NumGoodPairs(int[] nums, int sum, int p1, int p2)
-{
-    if(p1 >= nums.Length - 1 && p2 >= nums.Length - 1)
+    public int NumIslands(char[][] grid) 
     {
-        return sum;
-    }
-            
-    if(nums[p1] == nums[p2] && p1 < p2)
-    {
-        sum++;
+        if(grid == null || grid.Length == 0) return 0;
+        
+        var numOfIslands = 0;
+        
+        for(int i = 0; i < grid.Length; i++)
+        {
+            for(int j = 0; j < grid[i].Length; j++)
+            {
+                if(grid[i][j] == '1')
+                {
+                    numOfIslands += Transverse(grid, i, j);
+                }
+            }
+        }
+        return numOfIslands;
     }
     
-    if(p2 == nums.Length - 1)
+    private int Transverse(char[][] grid, int i, int j)
     {
-        ++p1;
-        p2 = p1;
+        if(i >= grid.Length || i < 0 || j >= grid[i].Length || j < 0 || grid[i][j] == '0') 
+        {
+            return 0;
+        }
+        
+        grid[i][j] = '0';
+        
+        //Transverse in the 4 directions
+        Transverse(grid, i - 1, j);
+        Transverse(grid, i + 1, j);
+        Transverse(grid, i, j - 1);
+        Transverse(grid, i, j + 1);
+        
+        return 1;
     }
-    
-    return NumGoodPairs(nums, sum, p1, ++p2);
 }
