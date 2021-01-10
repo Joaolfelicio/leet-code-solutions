@@ -7,7 +7,6 @@ bool IsAnagram(string s, string t)
         return false;
     }
     
-    //TODO: Create the sort algorithm
     char[] sArr = s.ToArray();
     Array.Sort(sArr);
     s = new string(sArr);
