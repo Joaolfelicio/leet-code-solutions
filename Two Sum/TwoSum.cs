@@ -1,15 +1,21 @@
-using System;
-
-int[] TwoSum(int[] nums, int target) {
-    
-    for(int i = 0; i < nums.Length; i++) {
+public class Solution 
+{
+    public int[] TwoSum(int[] nums, int target) 
+    {
+        var complements = new Dictionary<int, int>();
         
-        for(int k = i + 1; k < nums.Length; k++) {
+        for(int i = 0; i < nums.Length; i++)
+        {
+            var complementVal = target - nums[i];
             
-            if(nums[i] + nums[k] == target) {
-                return new int[] {i, k};
+            if(complements.ContainsKey(complementVal))
+            {
+                return new int[2] {complements[complementVal], i};
             }
+            
+            complements.Add(nums[i], i);
         }
+        
+        return new int[0];
     }
-    return null;
 }
