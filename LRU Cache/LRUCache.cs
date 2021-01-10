@@ -1,67 +1,117 @@
 public class LRUCache 
 {
-    private Dictionary<int, int> Dict {get; set; }
-    private List<int> KeysUsedOrder {get; set; }
-    private int Capacity {get; set;}
-
-    public LRUCache(int capacity) 
+    class DLinkedNode 
     {
-        Dict = new Dictionary<int, int>(capacity);
-        KeysUsedOrder = new List<int>(capacity);
-        Capacity = capacity;
+        public int Key;
+        public int Value;
+        public DLinkedNode Prev;
+        public DLinkedNode Next;
+        
+        public DLinkedNode() {}
+        
+        public DLinkedNode(int key, int value)
+        {
+            Key = key;
+            Value = value;
+        }
     }
     
-    public int Get(int key) 
+    private void AddNode(DLinkedNode node) 
+    {
+        // Add new node after head
+        node.Prev = Head;
+        node.Next = Head.Next;
+        
+        Head.Next.Prev = node;
+        Head.Next = node;
+    }
+    
+    private void RemoveNode(DLinkedNode node)
+    {
+        // Remove existing node
+        var prev = node.Prev;
+        var next = node.Next;
+        
+        prev.Next = next;
+        next.Prev = prev;
+    }
+    
+    private void MoveToHead(DLinkedNode node)
+    {
+        // Move node in between to the head;
+        RemoveNode(node);
+        AddNode(node);
+    }
+    
+    private DLinkedNode PopTail()
+    {
+        var result = Tail.Prev;
+        RemoveNode(result);
+        return result;
+    }
+    
+    private Dictionary<int, DLinkedNode> Cache = new Dictionary<int, DLinkedNode>();
+    private int Size;
+    private int Capacity;
+    private DLinkedNode Head;
+    private DLinkedNode Tail;
+    
+    public LRUCache(int capacity)
+    {
+        Size = 0;
+        Capacity = capacity;
+        
+        Head = new DLinkedNode();
+        Tail = new DLinkedNode();
+        
+        Head.Next = Tail;
+        Tail.Prev = Head;
+    }
+    
+    public int Get(int key)
     {
         if(!ContainsKey(key)) return -1;
         
-        UpdateLastUsed(key);
+        var node = Cache[key];
         
-        return Dict[key];
+        MoveToHead(node);
+        
+        return node.Value;
     }
     
-    public int Put(int key, int value) 
+    public void Put(int key, int value)
     {
-        if(ContainsKey(key)) 
-        {          
-            Dict[key] = value;
+        if(ContainsKey(key))
+        {
+            var node = Cache[key];
+            node.Value = value;
             
-            UpdateLastUsed(key);
-            
-            return value; 
+            MoveToHead(node);
         }
-        
-        if(IsFull()) RemoveLeastUsed();
-        
-        Dict[key] = value;
-        
-        UpdateLastUsed(key);
-
-        return value;
+        else
+        {
+            if(IsFull()) RemoveLeastUsed();
+            
+            var node = new DLinkedNode(key, value);
+            
+            Cache.Add(key, node);
+            Size++;           
+            
+            AddNode(node);
+        }
     }
     
     private void RemoveLeastUsed()
     {
-        if(!HasAny()) return;
-        
-        var leastUsed = KeysUsedOrder[0];
-        
-        KeysUsedOrder.RemoveAt(0);
-        Dict.Remove(leastUsed);
+        var tail = PopTail();
+        Cache.Remove(tail.Key);
+        Size--;
     }
     
-    private void UpdateLastUsed(int key)
-    {
-        KeysUsedOrder.Remove(key);
-        
-        var index = HasAny() ? KeysUsedOrder.Count : 0;
-        
-        KeysUsedOrder.Insert(index, key);
-    }
     
-    public bool ContainsKey(int key) => Dict.ContainsKey(key);
-    public bool IsFull() => KeysUsedOrder.Count == Capacity; 
-    public bool HasAny() => KeysUsedOrder.Count > 0;
+    
+    public bool ContainsKey(int key) => Cache.ContainsKey(key);
+    public bool IsFull() => Size == Capacity; 
 }
 
 /**
