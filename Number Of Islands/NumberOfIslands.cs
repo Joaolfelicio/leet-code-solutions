@@ -2,38 +2,38 @@ public class Solution
 {
     public int NumIslands(char[][] grid) 
     {
-        if(grid == null || grid.Length == 0) return 0;
+        var result = 0;
         
-        var numOfIslands = 0;
+        if(grid == null || grid.Length == 0 || grid[0].Length == 0) return result;
         
         for(int i = 0; i < grid.Length; i++)
         {
-            for(int j = 0; j < grid[i].Length; j++)
+            for(int k = 0; k < grid[i].Length; k++)
             {
-                if(grid[i][j] == '1')
+                if(grid[i][k] == '1')
                 {
-                    numOfIslands += Transverse(grid, i, j);
+                    result++;
+                    TransverseIsland(i, k, grid);
                 }
             }
         }
-        return numOfIslands;
+        return result;
     }
     
-    private int Transverse(char[][] grid, int i, int j)
+    private void TransverseIsland(int row, int column, char[][] grid)
     {
-        if(i >= grid.Length || i < 0 || j >= grid[i].Length || j < 0 || grid[i][j] == '0') 
+        if(row >= grid.Length || row < 0 || 
+           column >= grid[row].Length || column < 0 || 
+           grid[row][column] == '0')
         {
-            return 0;
+            return;
         }
         
-        grid[i][j] = '0';
+        grid[row][column] = '0';
         
-        //Transverse in the 4 directions
-        Transverse(grid, i - 1, j);
-        Transverse(grid, i + 1, j);
-        Transverse(grid, i, j - 1);
-        Transverse(grid, i, j + 1);
-        
-        return 1;
+        TransverseIsland(row - 1, column, grid);
+        TransverseIsland(row + 1, column, grid);
+        TransverseIsland(row, column - 1, grid);
+        TransverseIsland(row, column + 1, grid);
     }
 }
