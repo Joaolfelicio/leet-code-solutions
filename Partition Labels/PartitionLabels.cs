@@ -18,36 +18,23 @@ public class Solution
         var visitedLetters = new HashSet<char>();
         int count = 0;
         
+        int maxIndex = 0;
+        
         for(int i = 0; i < S.Length; i++)
         {
-            var shouldPartition = true;
+            var currentCharIndex = S[i] - 'a';
             
-            if(!visitedLetters.Contains(S[i]))
-            {              
-                foreach(var visitedChar in visitedLetters)
-                {
-                    var lastIndexChar = lastLetterIndex[visitedChar - 'a'];
-                    
-                    if(i <= lastIndexChar) 
-                    {
-                        shouldPartition = false;
-                        break;
-                    }
-                }
-                
-                if(shouldPartition && visitedLetters.Count > 0)
-                {
-                    result.Add(count);
-                    count = 0;
-                    visitedLetters.Clear();
-                } 
-                visitedLetters.Add(S[i]);
+            if(i > maxIndex) 
+            {
+                result.Add(count);
+                count = 0;
             }
-
+            
+            maxIndex = Math.Max(lastLetterIndex[currentCharIndex], maxIndex);
             count++;
         }
         
-        if(count > 0) result.Add(count);
+        result.Add(count);
         
         return result;
     }
