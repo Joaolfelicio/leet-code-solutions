@@ -9,33 +9,27 @@ public class Solution
         var lastLetterIndex = new int[26];
         
         for(int i = 0; i < S.Length; i++)
-        {
-            var charIndex = S[i] - 'a';
-            
-            lastLetterIndex[charIndex] = i;
+        {           
+            lastLetterIndex[S[i] - 'a'] = i;
         }
         
-        var visitedLetters = new HashSet<char>();
         int count = 0;
-        
+        // Store the highest index of the last character index
         int maxIndex = 0;
         
         for(int i = 0; i < S.Length; i++)
-        {
-            var currentCharIndex = S[i] - 'a';
-            
+        {           
             if(i > maxIndex) 
             {
                 result.Add(count);
                 count = 0;
             }
-            
-            maxIndex = Math.Max(lastLetterIndex[currentCharIndex], maxIndex);
+
+            maxIndex = Math.Max(lastLetterIndex[S[i] - 'a'], maxIndex);
             count++;
         }
         
         result.Add(count);
-        
         return result;
     }
 }
