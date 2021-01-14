@@ -20,39 +20,38 @@ public class Solution {
         
         var tempHead = head;
         // Key: "real" node, Value: copy node
-        var copies = PopulateDict(tempHead);
+        var copies = new Dictionary<Node, Node>();
        
         var dummyHead = new Node(-1);
         var currHead = dummyHead;
         
         while(head != null)
         {
-            var newNode = copies[head];
+            Node newNode;
+            
+            if(copies.ContainsKey(head))
+            {
+                newNode = copies[head];
+            }
+            else
+            {
+                newNode = new Node(head.val);
+                copies.Add(head, newNode);
+            }          
+            
             currHead.next = newNode;
-
-            // If the random pointer is not null, get the copy reference from the dictionary
+            
+            if(head.random != null && !copies.ContainsKey(head.random))
+            {
+                copies.Add(head.random, new Node(head.random.val));
+            }
+            
             newNode.random = head.random != null ? copies[head.random] : null;
-                   
+            
             head = head.next;
             currHead = currHead.next;
         }
         
         return dummyHead.next;
-    }
-    
-    private Dictionary<Node, Node> PopulateDict(Node head)
-    {
-        var copies = new Dictionary<Node, Node>();
-        
-        while(head != null)
-        {
-            var newNode = new Node(head.val);
-            
-            copies.Add(head, newNode);
-                        
-            head = head.next;
-        }
-        
-        return copies;
     }
 }
