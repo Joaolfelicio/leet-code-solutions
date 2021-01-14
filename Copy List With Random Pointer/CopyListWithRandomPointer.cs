@@ -18,7 +18,6 @@ public class Solution {
         
         if(head == null) return null;
         
-        var tempHead = head;
         // Key: "real" node, Value: copy node
         var copies = new Dictionary<Node, Node>();
        
