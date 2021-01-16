@@ -6,7 +6,7 @@ public class Solution
         
         var rottenQueue = new Queue<OrangePosition>();
         
-        // Validate the grid
+        // Validate the grid and enqueue the rooten oranges
         var freshCount = 0;
         
         for(int row = 0; row < grid.Length; row++)
