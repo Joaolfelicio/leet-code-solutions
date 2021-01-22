@@ -1,14 +1,14 @@
 public class FirstUnique 
 {
     public Queue<int> Numbers {get; }
-    public Dictionary<int, DoubleLinkedList> Dict {get; }
-    public DoubleLinkedList Head {get; set;}
-    public DoubleLinkedList Tail {get; set;}
+    public Dictionary<int, LinkedListNode<int>> Dict {get; }
+    public LinkedList<int> Uniques {get; }
 
     public FirstUnique(int[] nums) 
     {
         Numbers = new Queue<int>();
-        Dict = new Dictionary<int, DoubleLinkedList>();
+        Dict = new Dictionary<int, LinkedListNode<int>>();
+        Uniques = new LinkedList<int>();
         
         foreach(var num in nums)
         {
@@ -18,36 +18,23 @@ public class FirstUnique
     
     public int ShowFirstUnique() 
     {
-        if(Head != null) return Head.Val;
+        if(Uniques.Count > 0) return Uniques.First.Value;
         
         return -1;
     }
     
     public void Add(int value) 
     {
+        Numbers.Enqueue(value);
+        
         if(Dict.ContainsKey(value))
         {
-            Numbers.Enqueue(value);
             RemoveNonUnique(value);
             return;
         }
-               
-        var newNode = new DoubleLinkedList(null, value); 
         
-        if(Head == null)
-        {           
-            Head = newNode;
-            Tail = newNode;
-        }
-        else
-        {
-            newNode.Prev = Tail;
-            Tail.Next = newNode;
-            Tail = newNode;
-        }
-        
-        Dict.Add(value, newNode); 
-        Numbers.Enqueue(value);
+        Uniques.AddLast(value);        
+        Dict.Add(value, Uniques.Last);
     }
 
     
@@ -57,27 +44,9 @@ public class FirstUnique
         
         if(node == null) return;
         
-        var prev = node.Prev; 
-        var next = node.Next; 
-        
-        if(Head == node) Head = Head.Next;
-        if(prev != null) prev.Next = next;
-        if(next != null) next.Prev = prev;
+        Uniques.Remove(node);
         
         Dict[num] = null;
-    }
-}
-
-public class DoubleLinkedList
-{
-    public DoubleLinkedList Next {get; set;}
-    public DoubleLinkedList Prev {get; set;}
-    public int Val {get; set;}
-    
-    public DoubleLinkedList(DoubleLinkedList prev, int val)
-    {
-        Prev = prev;
-        Val = val;
     }
 }
 
