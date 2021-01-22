@@ -1,0 +1,1 @@
+https://leetcode.com/problems/first-unique-number/ #1429
