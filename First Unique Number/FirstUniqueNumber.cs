@@ -1,12 +1,10 @@
 public class FirstUnique 
 {
-    public Queue<int> Numbers {get; }
     public Dictionary<int, LinkedListNode<int>> Dict {get; }
     public LinkedList<int> Uniques {get; }
 
     public FirstUnique(int[] nums) 
     {
-        Numbers = new Queue<int>();
         Dict = new Dictionary<int, LinkedListNode<int>>();
         Uniques = new LinkedList<int>();
         
@@ -24,9 +22,7 @@ public class FirstUnique
     }
     
     public void Add(int value) 
-    {
-        Numbers.Enqueue(value);
-        
+    {       
         if(Dict.ContainsKey(value))
         {
             RemoveNonUnique(value);
