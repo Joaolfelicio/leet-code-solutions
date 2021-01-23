@@ -6,23 +6,25 @@ public class Solution
         
         if(string.IsNullOrWhiteSpace(digits)) return result;
         
-        var mapping = new Dictionary<char, string>()
+        var mapping = new string[]
         {
-            {'2', "abc"},
-            {'3', "def"},
-            {'4', "ghi"},
-            {'5', "jkl"},
-            {'6', "mno"},
-            {'7', "pqrs"},
-            {'8', "tuv"},
-            {'9', "wxyz"}
+            "0",
+            "1",
+            "abc",
+            "def",
+            "ghi",
+            "jkl",
+            "mno",
+            "pqrs",
+            "tuv",
+            "wxyz"
         };
                 
         Backtrack(result, mapping, digits, "", 0);
         return result;
     }
     
-    private void Backtrack(List<string> result, Dictionary<char, string> mapping, string digits, string current, int index)
+    private void Backtrack(List<string> result, string[] mapping, string digits, string current, int index)
     {
         if(index == digits.Length)
         {
@@ -30,7 +32,7 @@ public class Solution
             return;
         }
         
-        var letters = mapping[digits[index]];
+        var letters = mapping[digits[index] - '0'];
         for(int i = 0; i < letters.Length; i++)
         {
             Backtrack(result, mapping, digits, $"{current}{letters[i]}", index + 1);
