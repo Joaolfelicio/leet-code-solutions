@@ -1,1 +1,1 @@
-https://leetcode.com/problems/delete-node-in-a-linked-list
+https://leetcode.com/problems/design-snake-game/ #353
