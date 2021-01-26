@@ -11,52 +11,52 @@ public class FileSystem
     {
         var arrEntries = path.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
         
-        return GetEntry(arrEntries, Root).GetEntries();
+        return GetEntry(arrEntries, 0, Root).GetEntries();
     }
     
     public void Mkdir(string path) 
     {
         var arrDir = path.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
         
-        GetEntry(arrDir, Root);
+        GetEntry(arrDir, 0, Root);
     }
     
     public void AddContentToFile(string filePath, string content) 
     {
         var arrEntry = filePath.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
         
-        GetFile(arrEntry, Root).AddContent(content);
+        GetFile(arrEntry, 0, Root).AddContent(content);
     }
     
     public string ReadContentFromFile(string filePath)
     {
         var arrEntry = filePath.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
         
-        return GetFile(arrEntry, Root).Content;
+        return GetFile(arrEntry, 0, Root).Content;
     }
     
-    private File GetFile(string[] path, Entry entry)
+    private File GetFile(string[] path, int index, Entry entry)
     {
-        if(path.Length == 0) return (File) entry;
+        if(index == path.Length) return (File) entry;
         
-        var name = path[0];
+        var name = path[index];
         var dir = (Directory) entry;
         
         if(!dir.Entries.ContainsKey(name)) dir.Entries.Add(name, new File(name, $"{entry.FullPath}/{name}"));
         
-        return GetFile(path.Skip(1).ToArray(), dir.Entries[name]);
+        return GetFile(path, index + 1, dir.Entries[name]);
     }
     
-    private Entry GetEntry(string[] path, Entry entry)
+    private Entry GetEntry(string[] path, int index, Entry entry)
     {
-        if(path.Length == 0) return entry;
+        if(index == path.Length) return entry;
         
-        var name = path[0];
+        var name = path[index];
         var dir = (Directory) entry;
         
         if(!dir.Entries.ContainsKey(name)) dir.CreateEntry(new Directory(name, $"{dir.FullPath}/{name}"));
         
-        return GetEntry(path.Skip(1).ToArray(), dir.Entries[name]);
+        return GetEntry(path, index + 1, dir.Entries[name]);
     }
 }
 
