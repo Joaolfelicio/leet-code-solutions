@@ -4,29 +4,19 @@ public class Solution
     {
         if(nums == null || nums.Length == 0) return 0;
         
-        var result = Int32.MinValue;
-        var start = 0;
-        var end = 0;
+        var result = 0;
         var sum = 0;
         
-        while(end < nums.Length)
-        {
-            sum += nums[end];
-            
-            if(sum == k) result = Math.Max(result, end - start + 1);
-
-            if(end == nums.Length - 1)
-            {
-                start++;
-                end = start;
-                sum = 0;
-            }
-            else
-            {
-                end++;
-            }
-        }
+        var sumDict = new Dictionary<int, int>();
+        sumDict.Add(0, -1);
         
-        return result == Int32.MinValue ? 0 : result;
+        for(int i = 0; i < nums.Length; i++)
+        {
+            sum += nums[i];
+            
+            if(sumDict.ContainsKey(sum - k)) result = Math.Max(result, i - sumDict[sum - k]);
+            if(!sumDict.ContainsKey(sum)) sumDict.Add(sum, i);
+        }
+        return result;
     }
 }
