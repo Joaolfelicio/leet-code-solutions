@@ -1,12 +1,14 @@
 public class Solution 
 {   
+    // O(n) Time
+    // O(n) Space
     public int Trap(int[] height) 
     {
         if(height == null || height.Length == 0) return 0;
         
         var leftMax = new int[height.Length];
         leftMax[0] = height[0];
-        
+
         var rightMax = new int[height.Length];
         rightMax[height.Length - 1] = height[height.Length - 1];
         
