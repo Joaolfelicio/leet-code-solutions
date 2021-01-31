@@ -1,33 +1,38 @@
-using System;
-
-bool IsValid(string s) 
-{
-    Hashtable values = new Hashtable() 
+public class Solution {
+    public bool IsValid(string s) 
     {
-        {'(', ')'},
-        {'{', '}'},
-        {'[', ']'}
-    };
-    
-    Stack symbolStack = new Stack();
-
-    foreach(char current in s) 
-    {
-        if(values.ContainsKey(current)) 
+        if(string.IsNullOrWhiteSpace(s)) return true;
+        if(s.Length % 2 != 0) return false;
+        
+        var parentheses = GetParenthesesDict();
+        var stack = new Stack<char>();
+        
+        for(int i = 0; i < s.Length; i++)
         {
-            symbolStack.Push(values[current]);  
-        }
-        else 
-        {
-            if(symbolStack.Count > 0 && current == (char) symbolStack.Peek()) 
+            var c = s[i];
+            
+            if(parentheses.ContainsKey(c)) 
             {
-                symbolStack.Pop();
+                stack.Push(parentheses[c]);
             }
             else
             {
-                return false;
+                if(stack.Count > 0 && stack.Peek() == c) stack.Pop();
+                else return false;
             }
         }
+        
+        return stack.Count == 0;
     }
-    return symbolStack.Count == 0;
+    
+    private Dictionary<char, char> GetParenthesesDict()
+    {
+        return new Dictionary<char, char>()
+        {
+            {'(', ')'},
+            {'{', '}'},
+            {'[', ']'}
+        };
+    }
+        
 }
