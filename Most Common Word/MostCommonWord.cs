@@ -2,53 +2,42 @@ public class Solution
 {
     public string MostCommonWord(string paragraph, string[] banned) 
     {
-        var cleanParagraph = GetCleanParagraph(paragraph);
+        if(string.IsNullOrWhiteSpace(paragraph)) return string.Empty;
         
-        var bannedWordsSet = new HashSet<string>(banned);
+        var bannedWords = new HashSet<string>(banned);
+        var cleanPara = CleanParagraph(paragraph);
         
-        var frequency = new Dictionary<string, int>();
+        var cleanWords = cleanPara.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
         
-        foreach(var word in cleanParagraph.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        var commonWord = string.Empty;
+        var repetition = new Dictionary<string, int>();
+        
+        foreach(var word in cleanWords)
         {
-            if(bannedWordsSet.Contains(word)) continue;
+            if(bannedWords.Contains(word)) continue;
             
-            frequency.TryGetValue(word, out var wordFreq); 
-            frequency[word] = wordFreq + 1;
-        } 
-        return GetMostCommonWord(frequency);
+            repetition.TryGetValue(word, out var quantity);
+            repetition[word] = quantity + 1;
+            
+            if(commonWord == string.Empty || repetition[word] > repetition[commonWord]) 
+                commonWord = word;
+        }
+        
+        return commonWord;
     }
     
-    private string GetCleanParagraph(string paragraph)
+    private string CleanParagraph(string paragraph)
     {
-        var result = new StringBuilder();
+        var sb = new StringBuilder();
         
-        for(var i = 0; i < paragraph.Length; i++)
+        for(int i = 0; i < paragraph.Length; i++)
         {
-            var currentChar = Char.ToLower(paragraph[i]);
+            var c = Char.ToLower(paragraph[i]);
             
-            if(currentChar >= 'a' && currentChar <= 'z') 
-            {
-                result.Append(currentChar);
-            }
-            else
-            {
-                result.Append(' ');
-            }
+            if(c == ' ' || c >= 'a' && c <= 'z') sb.Append(Char.ToLower(c));
+            else if(c == ',') sb.Append(' ');
         }
-        return result.ToString();
-    }
-    
-    private string GetMostCommonWord(Dictionary<string, int> dictionary)
-    {
-        var mostFrequentWord = string.Empty;
-                
-        foreach(var word in dictionary.Keys)
-        {
-            if(!dictionary.ContainsKey(mostFrequentWord) || dictionary[word] > dictionary[mostFrequentWord])
-            {
-                mostFrequentWord = word;
-            }
-        }
-        return mostFrequentWord;
+        
+        return sb.ToString();
     }
 }
