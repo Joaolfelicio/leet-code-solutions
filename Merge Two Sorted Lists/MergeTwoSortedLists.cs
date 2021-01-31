@@ -1,5 +1,3 @@
-using System;
-
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -11,37 +9,33 @@ using System;
  *     }
  * }
  */
-
-ListNode MergeTwoLists(ListNode l1, ListNode l2) 
-{
-    if(l1 == null && l2 == null) return null;
+public class Solution {
+    public ListNode MergeTwoLists(ListNode l1, ListNode l2) 
+    {
         if(l1 == null) return l2;
         if(l2 == null) return l1;
-        
+  
         var dummyHead = new ListNode();
-        var currentDummyHead = dummyHead;
+        var current = dummyHead;
         
-        var currentl1 = l1;
-        var currentl2 = l2;
-        
-        while(currentl1 != null && currentl2 != null)
+        while(l1 != null && l2 != null)
         {
-            if(currentl1.val <= currentl2.val)
+            if(l1.val < l2.val)
             {
-                currentDummyHead.next = currentl1;
-                currentl1 = currentl1.next;
+                current.next = l1;
+                l1 = l1.next;
             }
             else
             {
-                currentDummyHead.next = currentl2;
-                currentl2 = currentl2.next;  
+                current.next = l2;
+                l2 = l2.next;
             }
-            
-            currentDummyHead = currentDummyHead.next;
+            current = current.next;
         }
         
-        if(currentl2 != null) currentDummyHead.next = currentl2;
-        else if(currentl1 != null) currentDummyHead.next = currentl1;
+        if(l1 == null) current.next = l2;
+        else if(l2 == null) current.next = l1;
         
         return dummyHead.next;
+    }
 }
