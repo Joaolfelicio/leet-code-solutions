@@ -13,44 +13,45 @@ public class Node {
 }
 */
 
-public class Solution {
-    public Node CopyRandomList(Node head) {
+public class Solution 
+{
+    public Node CopyRandomList(Node head) 
+    {
+        var dummyHead = new Node(0);
+        var current = dummyHead;
         
-        if(head == null) return null;
-        
-        // Key: "real" node, Value: copy node
-        var copies = new Dictionary<Node, Node>();
-       
-        var dummyHead = new Node(-1);
-        var currHead = dummyHead;
+        var clones = new Dictionary<Node, Node>();
         
         while(head != null)
         {
-            Node newNode;
+            Node node;
             
-            if(copies.ContainsKey(head))
-            {
-                newNode = copies[head];
+            if(!clones.ContainsKey(head)) 
+            {            
+                var newNode = new Node(head.val);
+                node = newNode;
+                clones.Add(head, newNode);
             }
             else
             {
-                newNode = new Node(head.val);
-                copies.Add(head, newNode);
-            }          
-            
-            currHead.next = newNode;
-            
-            if(head.random != null && !copies.ContainsKey(head.random))
-            {
-                copies.Add(head.random, new Node(head.random.val));
+                node = clones[head];
             }
             
-            newNode.random = head.random != null ? copies[head.random] : null;
+            current.next = node;
+             
+            Node randomNode = null;
+            if(head.random != null)
+            {
+                if(!clones.ContainsKey(head.random)) 
+                    clones.Add(head.random, new Node(head.random.val));
+                randomNode = clones[head.random];
+            }
             
+            node.random = randomNode;
+            
+            current = current.next;
             head = head.next;
-            currHead = currHead.next;
         }
-        
         return dummyHead.next;
     }
 }
