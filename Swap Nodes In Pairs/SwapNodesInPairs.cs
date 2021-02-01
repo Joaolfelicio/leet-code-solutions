@@ -15,14 +15,12 @@ public class Solution
     {
         if(head == null || head.next == null) return head;
         
-        var nextnext = head.next.next;
+        var nextNode = head.next;
         
-        head.next.next = head;
+        head.next = SwapPairs(nextNode.next);
         
-        var newHead = head.next;
-        
-        head.next = SwapPairs(nextnext);
-        
-        return newHead;
+        nextNode.next = head;
+
+        return nextNode;
     }
 }
