@@ -11,23 +11,21 @@
  *     }
  * }
  */
-public class Solution {
+public class Solution 
+{
     public bool IsValidBST(TreeNode root) 
     {
-         return IsValidBST(root, Int64.MinValue, Int64.MaxValue);   
+        return IsValidBST(root, Int64.MinValue, Int64.MaxValue);  
     }
     
-    public bool IsValidBST(TreeNode root, long min, long max)
+    public bool IsValidBST(TreeNode root, long left, long right)
     {
-        if(root == null)
-        {
-            return true;
-        }
-        else if(root.val <= min || root.val >= max)
-        {
-            return false;
-        }
+        if(root == null) return true;
         
-        return IsValidBST(root.left, min, root.val) && IsValidBST(root.right, root.val, max);
+        var rootVal = (long) root.val;
+        
+        var isNodeValid = left < rootVal && rootVal < right;
+        
+        return isNodeValid && IsValidBST(root.left, left, rootVal) && IsValidBST(root.right, rootVal, right);
     }
 }
