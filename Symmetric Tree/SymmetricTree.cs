@@ -1,23 +1,29 @@
-using System;
-
-bool IsSymmetric(TreeNode root) 
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution 
 {
-    return IsMirror(root.left, root.right);
-}
-
-bool IsMirror(TreeNode leftNode, TreeNode rightNode)
-{
-    if(leftNode == null && rightNode == null)
+    public bool IsSymmetric(TreeNode root) 
     {
-        return true;
+        if(root == null) return true;
+        return IsSymmetric(root.left, root.right);
     }
     
-    if(leftNode == null || rightNode == null)
+    private bool IsSymmetric(TreeNode left, TreeNode right)
     {
-        return false;
+        if(left == null && right == null) return true;
+        if(left == null || right == null) return false;
+        
+        return left.val == right.val && IsSymmetric(left.left, right.right) && IsSymmetric(left.right, right.left);
     }
-    
-    return (leftNode.val == rightNode.val) 
-        && IsMirror(leftNode.right, rightNode.left)
-        && IsMirror(leftNode.left, rightNode.right);
 }
