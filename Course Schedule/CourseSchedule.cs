@@ -6,10 +6,12 @@ public class Solution
         var courseDict = BuildCourseGraph(prerequisites);
         
         var completed = new bool[numCourses];
-        var path = new bool[numCourses];
+        
 
         for(int i = 0; i < numCourses; i++)
         {
+            var path = new bool[numCourses];
+
             if(IsCyclic(i, courseDict, completed, path)) 
                 return false;
         }
@@ -31,7 +33,6 @@ public class Solution
             if(IsCyclic(dep, courseDict, completed, path)) return true;
         }
         
-        path[currCourse] = false;
         completed[currCourse] = true;
         
         return false;
