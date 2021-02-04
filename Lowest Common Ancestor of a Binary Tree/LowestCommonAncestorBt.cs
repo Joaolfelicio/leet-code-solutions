@@ -7,14 +7,13 @@
  *     public TreeNode(int x) { val = x; }
  * }
  */
-
- // Brute force
-public class Solution {
+public class Solution 
+{
     public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) 
-    {       
+    {
         var ancestorTable = new Dictionary<TreeNode, TreeNode>();
         
-        populateHashAncestor(root, ancestorTable);
+        PopulateHashAncestor(root, ancestorTable);
         
         var visitedSet = new HashSet<TreeNode>();
         
@@ -35,54 +34,14 @@ public class Solution {
         return null;
     }
     
-    private void populateHashAncestor(TreeNode root, Dictionary<TreeNode, TreeNode> ancestorTable)
+    private void PopulateHashAncestor(TreeNode node, Dictionary<TreeNode, TreeNode> ancestors)
     {
-        if(root == null) return;
+        if(node == null) return;
         
-        if(root.left != null)
-        {
-            ancestorTable.TryAdd(root.left, root);
-        }
-        if(root.right != null)
-        {
-            ancestorTable.TryAdd(root.right, root);
-        }
+        if(node.left != null) ancestors.Add(node.left, node);
+        if(node.right != null) ancestors.Add(node.right, node);
         
-        populateHashAncestor(root.left, ancestorTable);
-        populateHashAncestor(root.right, ancestorTable);
-    }
-}
-
-// Recursive BFS
-public class Solution2 {
-    public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) 
-    {       
-        return FindAncestor(root, q, p);
-    }
-    
-    private TreeNode FindAncestor(TreeNode current, TreeNode q, TreeNode p)
-    {
-        if(current == null) return null;
-
-        if(current == q || current == p) return current;
-
-        var nodeLeft = FindAncestor(current.left, q, p);
-
-        var nodeRight = FindAncestor(current.right, q, p);
-
-        //If both are not null, we found the ancestor
-        if(nodeLeft != null && nodeRight != null) 
-        {
-            return current;
-        } 
-        else if(nodeLeft != null) 
-        {
-            return nodeLeft;
-        } 
-        else if(nodeRight != null) 
-        {
-            return nodeRight;
-        }
-        return null;
+        PopulateHashAncestor(node.left, ancestors);
+        PopulateHashAncestor(node.right, ancestors);
     }
 }
