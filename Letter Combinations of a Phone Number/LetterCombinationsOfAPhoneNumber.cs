@@ -6,10 +6,38 @@ public class Solution
         
         if(string.IsNullOrWhiteSpace(digits)) return result;
         
-        var mapping = new string[]
+        var mapping = GetMapping();
+        var sb = new StringBuilder();
+        
+        Backtrack(digits, 0, mapping, result, sb);
+        
+        return result;
+    }
+    
+    private void Backtrack(string digits, int index, string[] mappings, List<string> result, StringBuilder current)
+    {
+        if(index == digits.Length)
         {
-            "0",
-            "1",
+            result.Add(current.ToString());
+            return;
+        }
+
+        var character = digits[index] - '0';
+        
+        foreach(var letter in mappings[character])
+        {
+            current.Append(letter);
+            Backtrack(digits, index + 1, mappings, result, current);
+            current.Length--;
+        }
+    }
+    
+    private string[] GetMapping()
+    {
+        return new string[]
+        {
+            "",
+            "",
             "abc",
             "def",
             "ghi",
@@ -19,23 +47,5 @@ public class Solution
             "tuv",
             "wxyz"
         };
-                
-        Backtrack(result, mapping, digits, "", 0);
-        return result;
-    }
-    
-    private void Backtrack(List<string> result, string[] mapping, string digits, string current, int index)
-    {
-        if(index == digits.Length)
-        {
-            result.Add(current);
-            return;
-        }
-        
-        var letters = mapping[digits[index] - '0'];
-        for(int i = 0; i < letters.Length; i++)
-        {
-            Backtrack(result, mapping, digits, $"{current}{letters[i]}", index + 1);
-        }
     }
 }
