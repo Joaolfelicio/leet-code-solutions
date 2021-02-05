@@ -3,28 +3,33 @@ public class Solution
     public IList<string> GenerateParenthesis(int n) 
     {
         var result = new List<string>();
+        var sb = new StringBuilder();
         
-        if(n == 0) return result;
-        
-        Backtracking(result, "", 0, 0, n);
+        Backtrack(result, sb, n, n);
         
         return result;
     }
     
-    private void Backtracking(List<string> result, string current, int open, int close, int n)
+    private void Backtrack(List<string> result, StringBuilder current, int left, int right)
     {
-        // If current string has the desired length (n * 2), add and stop
-        if(current.Length == n * 2)
+        if(left == 0 && right == 0)
         {
-            result.Add(current);
+            result.Add(current.ToString());
             return;
         }
         
-        // If there are less opening parentheses than n (where n will be the maximum number of either
-        // opening or closing parentheses)
-        if(open < n) Backtracking(result, current + "(", open + 1, close, n);
+        if(left > 0)
+        {
+            current.Append("(");
+            Backtrack(result, current, left - 1, right);
+            current.Length--;
+        }
         
-        // If there are less closing parentheses than opening parentheses
-        if(close < open) Backtracking(result, current + ")", open, close + 1, n);
+        if(left < right)
+        {
+            current.Append(")");
+            Backtrack(result, current, left, right - 1);
+            current.Length--;
+        }
     }
 }
