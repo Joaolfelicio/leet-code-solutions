@@ -2,40 +2,62 @@ public class Solution
 {
     public bool Exist(char[][] board, string word) 
     {
-        if(board == null || string.IsNullOrEmpty(word) || board[0].Length == 0) return false;
+        if(board == null || board.Length == 0 || board[0].Length == 0 || string.IsNullOrWhiteSpace(word)) 
+            return false;
         
         for(int row = 0; row < board.Length; row++)
         {
             for(int col = 0; col < board[row].Length; col++)
             {
-                if(board[row][col] == word[0] && Backtracking(board, word, 0, row, col)) return true;
+                if(board[row][col] == word[0] && Backtrack(board, word, 0, row, col)) 
+                    return true;
             }
         }
         return false;
     }
     
-    private bool Backtracking(char[][] board, string word, int index, int row, int col)
+    private bool Backtrack(char[][] board, string word, int index, int row, int col)
     {
-        // Once the index is the same as the word length, it means they are equal
-        if(word.Length == index) return true;
+        if(index == word.Length - 1)
+        {
+            return true;
+        }
         
-        // Filter the positions out of bound, where the position is 0 and where it is not the same char value
-        if(row < 0 || row >= board.Length || 
-           col < 0 || col >= board[row].Length || 
-           board[row][col] == '0' || board[row][col] != word[index]) 
-            return false;
-        
-        // Change it temporarily to mark it as visited
         var temp = board[row][col];
         board[row][col] = '0';
+
+        foreach(var neighbour in GetNeighbours(board, word[index + 1], row, col))
+        {
+            if(Backtrack(board, word, index + 1, neighbour[0], neighbour[1])) return true;
+        }
         
-        // Visit all the adjacent
-        if(Backtracking(board, word, index + 1, row + 1, col) || Backtracking(board, word, index + 1, row - 1, col) ||
-          Backtracking(board, word, index + 1, row, col + 1) || Backtracking(board, word, index + 1, row, col - 1))
-            return true;
-        
-        // If its not equal, back track and put the initial value back
         board[row][col] = temp;
         return false;
+    }
+    
+    private List<int[]> GetNeighbours(char[][] board, char neighbour, int row, int col)
+    {
+        var result = new List<int[]>();
+        
+        var directions = new int[][]
+        {
+            new int[] {0, 1},
+            new int[] {1, 0},
+            new int[] {0, -1},
+            new int[] {-1, 0}
+        };
+        
+        foreach(var dir in directions)
+        {
+            var newRow = row + dir[0];
+            var newCol = col + dir[1];
+            
+            if(newRow < 0 || newRow >= board.Length || 
+               newCol < 0 || newCol >= board[newRow].Length || 
+               board[newRow][newCol] != neighbour) continue;
+            
+            result.Add(new int[] {newRow, newCol});
+        }
+        return result;
     }
 }
