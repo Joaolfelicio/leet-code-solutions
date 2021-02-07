@@ -1,20 +1,22 @@
-public class Solution {
+public class Solution 
+{
     public int[] TwoSum(int[] numbers, int target) 
     {
-        if(numbers == null || numbers.Length < 2) return new int[0];
+        var result = new int[2];
         
-        var start = 0;
-        var end = numbers.Length - 1;
+        if(numbers == null || numbers.Length == 0) return result;
         
-        while(start < end)
+        var left = 0;
+        var right = numbers.Length - 1;
+        
+        while(left < right)
         {
-            var sum = numbers[start] + numbers[end];
+            var sum = numbers[left] + numbers[right];
             
-            if(sum == target) return new int[] {start + 1, end + 1};
-            else if(sum > target) end--;
-            else start++;
-                
+            if(sum < target) left++;
+            else if(sum > target) right--;
+            else return new int[] {left + 1, right + 1};
         }
-        return new int[0];
+        return result;
     }
 }
