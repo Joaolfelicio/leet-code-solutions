@@ -1,35 +1,29 @@
 public class Solution 
 {
     public int MinMeetingRooms(int[][] intervals) 
-    {   
-        if(intervals == null) return 0;
-     
-        var duplicates = 0;
+    {
+        if(intervals == null || intervals.Length == 0) return 0;
         
         Array.Sort(intervals, (a, b) => a[0] - b[0]);
         
+        var duplicates = 0;
+        
         var rooms = new SortedSet<int>();
-
-        rooms.Add(intervals[0][1]);
+        rooms.Add(intervals[0][1]);   
         
         for(int i = 1; i < intervals.Length; i++)
         {
-            var current = intervals[i];
+            var firstRoom = rooms.Min;
+            var currInterval = intervals[i];
             
-            if(current[0] >= rooms.Min)
+            if(firstRoom <= currInterval[0])
             {
-                rooms.Remove(rooms.Min);
+                 rooms.Remove(firstRoom);
             }
             
-            if(!rooms.Contains(intervals[i][1]))
-            {
-                rooms.Add(intervals[i][1]);
-            }
-            else
-            {
-                duplicates++;
-            }
+            if(!rooms.Add(currInterval[1])) duplicates++;
         }
+        
         return rooms.Count + duplicates;
     }
 }
