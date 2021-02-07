@@ -1,26 +1,37 @@
 public class Solution 
 {
-    public IList<string> TopKFrequent(string[] words, int k) 
-    {      
-        var frequency = new Dictionary<string, int>();
+    public int[] TopKFrequent(int[] nums, int k) 
+    {
+        var result = new int[k];
         
-        foreach(var word in words)
+        if(nums == null || nums.Length == 0 || k == 0) return result;  
+        
+        var numsQuantity = GetNumsQuantity(nums)
+                            .OrderByDescending(x => x.Value)
+                            .Take(k)
+                            .ToDictionary(x => x.Key);
+                            
+        
+        int index = 0;
+        foreach(var key in numsQuantity.Keys)
         {
-            if(frequency.ContainsKey(word))
-            {
-                frequency[word]++;
-            }
-            else
-            {
-                frequency.Add(word, 1);
-            }
+            result[index] = key;
+            index++;
         }
         
-        return frequency
-            .OrderByDescending(x => x.Value)
-            .ThenBy(y => y.Key)
-            .Select(z => z.Key)
-            .Take(k)
-            .ToList();
+        return result;
+    }
+    
+    private Dictionary<int, int> GetNumsQuantity(int[] nums)
+    {
+        var result = new Dictionary<int, int>();
+        
+        foreach(var num in nums)
+        {
+            result.TryGetValue(num, out var quantity);
+            result[num] = quantity + 1;
+        }
+        
+        return result;
     }
 }
