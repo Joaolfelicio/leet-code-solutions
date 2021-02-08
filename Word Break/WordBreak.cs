@@ -1,29 +1,27 @@
-using System;
-
-public bool WordBreak(string s, IList<string> wordDict) {
-    
-    bool[] arr = new bool[s.Length + 1];
-    
-    arr[0] = true;
-    
-    for(int i = 0; i < arr.Length; i++)
+public class Solution 
+{
+    public bool WordBreak(string s, IList<string> wordDict) 
     {
-        if(!arr[i]) 
+        if(string.IsNullOrWhiteSpace(s) || wordDict == null || wordDict.Count == 0) return false;
+        
+        var table = new bool[s.Length + 1];
+        table[0] = true;
+        
+        for(int i = 0; i < table.Length; i++)
         {
-            continue;
+            if(!table[i]) continue;
+            
+            foreach(var word in wordDict)
+            {
+                if(i + word.Length >= table.Length) continue;
+                
+                var sSubstring = s.Substring(i, word.Length);
+                
+                if(word.Equals(sSubstring)) table[i + word.Length] = true;
+            }
         }
         
-        foreach(var word in wordDict) 
-        {
-            if(i + word.Length < arr.Length) {
-
-                if(s.Substring(i, word.Length) == word)
-                {
-                    arr[i + word.Length] = true; 
-                }
-            } 
-        } 
+        
+        return table[table.Length - 1];
     }
-    
-    return arr[arr.Length - 1];
 }
