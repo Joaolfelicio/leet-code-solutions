@@ -1,33 +1,25 @@
-using System;
-
-void MoveZeroes(int[] nums) 
+public class Solution 
 {
-    ExchangeZeroes(nums, 0, 0);
-}
-
-void ExchangeZeroes(int[] nums, int p1, int zeroCount)
-{
-    if(p1 >= nums.Length - zeroCount)
+    public void MoveZeroes(int[] nums) 
     {
-        return;
-    }
-    
-    if(nums[p1] == 0)
-    {
-        zeroCount++;
+        if(nums == null || nums.Length == 0) return;
         
-        for(int i = p1; i < nums.Length - zeroCount; i++)
+        var numZeroes = 0;
+        
+        for(int i = 0; i < nums.Length; i++)
         {
-            nums[i] = nums[i + 1]; 
+            if(nums[i] == 0) 
+            {
+                numZeroes++;
+                continue;
+            }
+            
+            nums[i - numZeroes] = nums[i];
         }
         
-        nums[nums.Length - zeroCount] = 0;
+        for(int i = nums.Length - numZeroes; i < nums.Length; i++)
+        {
+            nums[i] = 0;
+        }
     }
-    else
-    {
-        p1++;
-    }
-    
-    ExchangeZeroes(nums, p1, zeroCount);
 }
-
