@@ -1,73 +1,55 @@
-public class MinStack {
-    private int minValue = Int32.MaxValue;
-    private int[] stack = null;
-    public int size = 2;
-    public int numOfElems = 0;
-    
-    public MinStack() {
-        stack = new int[size];
-    }
-    
-    public void Push(int x) {
-        
-        if(x < minValue)
-        {
-            minValue = x;
-        }
-        
-        stack[++numOfElems - 1] = x;
-        
-        if(numOfElems / size > 0.5)
-        {
-            resize();
-        }
-    }
-    
-    public void Pop() {
-        var temp = stack[numOfElems - 1];
-        
-        numOfElems--;
-        
-        if(temp == minValue)
-        {
-            minValue = newMinValue();
-        }
-    }
-    
-    public int Top() {
-        return stack[numOfElems - 1];
-    }
-    
-    public int GetMin() {
-        return minValue;
-    }
-    
-    private void resize()
+public class MinStack 
+{
+    private Node Head {get; set;}
+    /** initialize your data structure here. */
+    public MinStack() 
     {
-        size = size * 2;
-        
-        var newStack = new int[size];
-        
-        for(int i = 0; i < numOfElems; i++)
-        {
-            newStack[i] = stack[i];
-        }
-        
-        stack = newStack;
+       Head = null; 
     }
     
-    private int newMinValue()
+    public void Push(int x) 
     {
-        int minValue = int.MaxValue;
-        for(int i = 0; i < numOfElems; i++)
+        if(Head == null)
         {
-            if(stack[i] < minValue)
-            {
-                minValue = stack[i];
-            }
+            Head = new Node(x, x);
         }
-        return minValue;
+        else 
+        {
+            var newNode = new Node(x, Math.Min(x, Head.Min), Head);
+            Head = newNode;
+        }
     }
+    
+    public void Pop() 
+    {
+        Head = Head.Next;
+    }
+    
+    public int Top() 
+    {
+        return Head.Value;
+    }
+    
+    public int GetMin() 
+    {
+        return Head.Min;
+    }
+}
+
+public class Node
+{
+    public int Value {get;}
+    public int Min {get;}
+    public Node Next {get; set;}
+    
+    public Node(int value, int min, Node next)
+    {
+        Value = value;
+        Min = min;
+        Next = next;
+    }
+    
+    public Node(int value, int min) : this(value, min, null) {}
 }
 
 /**
