@@ -1,27 +1,34 @@
-using System;
-
-int[] SortArrayByParity(int[] A) 
+public class Solution 
 {
-    int p1 = 0;
-    int p2 = A.Length - 1;
-    
-    while(p1 != p2)
+    public int[] SortArrayByParity(int[] A) 
     {
-        if(A[p1] % 2 == 0)
+        var n = A.Length;
+        
+        if(A == null || n == 0) return A;
+        
+        var left = 0;
+        var right = n - 1;
+        
+        while(right > left)
         {
-            p1++;
-        }
-        else
-        {
-            if(A[p2] % 2 == 0)
+            if(A[left] % 2 != 0)
             {
-                int temp = A[p1];
-                
-                A[p1] = A[p2];
-                A[p2] = temp;
+                Swap(A, left, right);
+                right--;
             }
-            p2--;
+            else
+            {
+                left++;
+            }
         }
+        
+        return A;
     }
-    return A;
+    
+    private void Swap(int[] A, int left, int right)
+    {
+        var temp = A[left];
+        A[left] = A[right];
+        A[right] = temp;
+    }
 }
