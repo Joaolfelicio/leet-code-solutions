@@ -2,36 +2,54 @@ public class Solution
 {
     public string[] ReorderLogFiles(string[] logs) 
     {
-        List<string> letterLogs = new List<string>(); 
-        List<string> digitLogs = new List<string>();
+        if(logs == null || logs.Length == 0)  return logs;   
+                
+        var (letterLogs, digitLogs) = FilterLogs(logs);
         
-        foreach (var log in logs)
+        SortLetterLogs(letterLogs);
+        
+        letterLogs.AddRange(digitLogs);
+        
+        return letterLogs.ToArray();
+    }
+    
+    private void SortLetterLogs(List<string> letterLogs)
+    {
+        letterLogs.Sort((a, b) => 
         {
-            if (char.IsDigit(log[log.IndexOf(' ') + 1]))
-            {
-                digitLogs.Add(log);
-            }
-            else
+            var aContentSubstring = a.Substring(a.IndexOf(' '));
+            var bContentSubstring = b.Substring(b.IndexOf(' '));
+            
+            var diff = aContentSubstring.CompareTo(bContentSubstring);
+            
+            if(diff != 0) return diff;
+            
+            var aIdSubstring = a.Substring(0, a.IndexOf(' '));
+            var bIdSubstring = b.Substring(0, b.IndexOf(' '));
+            
+            return aIdSubstring.CompareTo(bIdSubstring);
+        });
+    }
+    
+    private (List<string>, List<string>) FilterLogs(string[] logs)
+    {
+        var letterLogs = new List<string>();
+        var digitLogs = new List<string>();
+        
+        foreach(var log in logs)
+        {
+            var index = log.IndexOf(' ') + 1;
+            
+            if(log[index] >= 'a' && log[index] <= 'z')
             {
                 letterLogs.Add(log);
             }
-        }
-
-        letterLogs.Sort((a, b) =>
-        {
-            string a_substr = a.Substring(a.IndexOf(' ') + 1);
-            
-            string b_substr = b.Substring(b.IndexOf(' ') + 1);
-            
-            var result = a_substr.CompareTo(b_substr);
-            if (result == 0)
+            else
             {
-                result = a.Substring(0, a.IndexOf(' ')).CompareTo(b.Substring(0, b.IndexOf(' ')));
+                digitLogs.Add(log);
             }
-            return result;
-        });
-
-        letterLogs.AddRange(digitLogs);
-        return letterLogs.ToArray(); 
+        }
+        
+        return (letterLogs, digitLogs);
     }
 }
