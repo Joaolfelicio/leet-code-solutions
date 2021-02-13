@@ -1,6 +1,7 @@
 public class Trie 
 {
-    TrieNode Root {get;}
+    private TrieNode Root {get; set;}
+    
     /** Initialize your data structure here. */
     public Trie() 
     {
@@ -10,57 +11,64 @@ public class Trie
     /** Inserts a word into the trie. */
     public void Insert(string word) 
     {
-        Insert(word, 0, Root);
-    }
-    
-    private void Insert(string word, int index, TrieNode node)
-    {
-        var currentChar = word[index];
-               
-        if(!node.Children.ContainsKey(currentChar))
-            node.Children[currentChar] = new TrieNode(currentChar);
+        var current = Root;
         
-        if(word.Length - 1 == index) node.Children[currentChar].IsWord = true;
-        else Insert(word, index + 1, node.Children[currentChar]);
+        for(int i = 0; i < word.Length; i++)
+        {
+            var c = word[i];
+            var charIndex = c - 'a';
+
+            if(current.Children[charIndex] == null) 
+                current.Children[charIndex] = new TrieNode(c);
+            
+            current = current.Children[charIndex];
+        }
+        current.IsWord = true;
     }
     
     /** Returns if the word is in the trie. */
     public bool Search(string word) 
     {
-        var target = Search(word, 0, Root);
+        var node = Find(word);
         
-        return target != null && target.IsWord;
+        return node != null && node.IsWord;
     }
     
     /** Returns if there is any word in the trie that starts with the given prefix. */
     public bool StartsWith(string prefix) 
     {
-        return Search(prefix, 0, Root) != null;
+        return Find(prefix) != null;
     }
     
-    private TrieNode Search(string word, int index, TrieNode node)
+    private TrieNode Find(string searchTerm)
     {
-        var currentChar = word[index];
+        var current = Root;
         
-        if(!node.Children.ContainsKey(currentChar)) return null;
+        for(int i = 0; i < searchTerm.Length; i++)
+        {
+            var c = searchTerm[i];
+            
+            var childNode = current.Children[c - 'a'];
+            
+            if(childNode == null) return null;
+            else current = childNode;
+        }
         
-        var child = node.Children[currentChar];
-        
-        if(word.Length - 1 == index) return child;
-        else return Search(word, index + 1, child);
+        return current;
     }
 }
 
 public class TrieNode
 {
-    public char Value {get;}
-    public Dictionary<char, TrieNode> Children {get; set;}
+    public char Character {get;}
     public bool IsWord {get; set;}
+    public TrieNode[] Children {get;}
     
-    public TrieNode(char value = '\0')
+    public TrieNode(char character = '\0', bool isWord = false)
     {
-        Value = value;
-        Children = new Dictionary<char, TrieNode>();
+        Character = character;
+        IsWord = isWord;
+        Children = new TrieNode[26];
     }
 }
 
