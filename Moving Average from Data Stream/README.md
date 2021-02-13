@@ -1,1 +1,1 @@
-https://leetcode.com/problems/move-zeroes #283
+https://leetcode.com/problems/moving-average-from-data-stream/ #346
