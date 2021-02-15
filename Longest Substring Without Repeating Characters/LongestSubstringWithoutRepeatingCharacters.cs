@@ -4,24 +4,27 @@ public class Solution
     {
         if(string.IsNullOrEmpty(s)) return 0;
         
-        var seen = new HashSet<char>();
+        var max = 0;
+        var used = new HashSet<char>();
         
-        var maxSum = 0;
-        var start = 0;
-        var end = 0;
+        var left = 0;
+        var right = 0;
         
-        while(start < s.Length && end < s.Length)
+        while(right < s.Length)
         {
-            if(!seen.Contains(s[end]))
+            if(!used.Contains(s[right]))
             {
-                seen.Add(s[end++]);
-                maxSum = Math.Max(maxSum, end - start);
+                used.Add(s[right]);
+                right++;
+                max = Math.Max(max, right - left);
             }
             else
             {
-                seen.Remove(s[start++]);
+                used.Remove(s[left]);
+                left++;
             }
         }
-        return maxSum;
+        
+        return max;
     }
 }
