@@ -2,76 +2,85 @@ public class Solution
 {
     public int OrangesRotting(int[][] grid) 
     {
-        if(grid == null || grid.Length == 0 || grid[0].Length == 0) return 0;
+        if(grid == null || grid.Length == 0) return -1;
         
-        var rottenQueue = new Queue<OrangePosition>();
+        var rottenOranges = new Queue<int[]>();
         
-        // Validate the grid and enqueue the rooten oranges
-        var freshCount = 0;
+        var goodOranges = CountOranges(rottenOranges, grid);
+        var minutes = 0;
         
-        for(int row = 0; row < grid.Length; row++)
+        // If there are already no good oranges, it takes 0 minutes
+        if(goodOranges == 0) return minutes;
+        
+        var orangeQuantity = goodOranges + rottenOranges.Count;
+        
+        while(rottenOranges.Count > 0)
         {
-            for(int col = 0; col < grid[row].Length; col++)
-            {
-                if(grid[row][col] == 1)
-                {
-                    freshCount++;
-                }
-                else if(grid[row][col] == 2)
-                {
-                    rottenQueue.Enqueue(new OrangePosition(row, col));
-                }
-            }
-        }
-        
-        if(freshCount == 0) return 0;
-        if(rottenQueue.Count == 0) return -1;
-        
-        freshCount += rottenQueue.Count;
-        
-        var minutes = -1;        
-        while(rottenQueue.Count > 0)
-        {
-            var size = rottenQueue.Count;
+            var size = rottenOranges.Count;
             
             for(int i = 0; i < size; i++)
             {
-                var current = rottenQueue.Dequeue();
-                var row = current.Row;
-                var col = current.Col;
+                var current = rottenOranges.Dequeue();
+                var row = current[0];
+                var col = current[1];
                 
-                freshCount--;
+                orangeQuantity--;
                 
-                AddRottenOrange(new OrangePosition(row - 1, col), grid, rottenQueue);
-                AddRottenOrange(new OrangePosition(row + 1, col), grid, rottenQueue);
-                AddRottenOrange(new OrangePosition(row, col - 1), grid, rottenQueue);
-                AddRottenOrange(new OrangePosition(row, col + 1), grid, rottenQueue);
+                foreach(var neighbour in GetNeighbours(row, col, grid))
+                {
+                    grid[neighbour[0]][neighbour[1]] = 2;
+                    rottenOranges.Enqueue(neighbour);
+                }
             }
+            
             minutes++;
         }
-        return freshCount == 0 ? minutes : -1;
-    }
-    
-    private void AddRottenOrange(OrangePosition position, int[][] grid, Queue<OrangePosition> rottenQueue)
-    {
-        var row = position.Row;
-        var col = position.Col;
-        
-        if(row < 0 || row >= grid.Length || col < 0 || col >= grid[row].Length || grid[row][col] != 1) return;
-        
-        grid[row][col] = 2;
-        rottenQueue.Enqueue(position);
-    }
-}
 
-public class OrangePosition
-{
-    public OrangePosition(int row, int col)
-    {
-        Row = row;
-        Col = col;
+        return orangeQuantity == 0 ? minutes - 1 : -1;
     }
     
-    public int Row {get; set;}
-    public int Col {get; set;}
+    private List<int[]> GetNeighbours(int row, int col, int[][] grid)
+    {
+        var directions = new int[][]
+        {
+            new int[] {0, 1}, 
+            new int[] {0, -1},
+            new int[] {1, 0},
+            new int[] {-1, 0}
+        };
+        
+        var result = new List<int[]>();
+        
+        foreach(var dir in directions)
+        {
+            var newRow = row + dir[0];
+            var newCol = col + dir[1];
+            
+            if(newRow < 0 || newRow >= grid.Length ||
+               newCol < 0 || newCol >= grid[newRow].Length ||
+               grid[newRow][newCol] != 1) continue;
+            
+            result.Add(new int[] {newRow, newCol});
+        }
+        
+        return result;
+    }
+    
+    private int CountOranges(Queue<int[]> rottenOranges, int[][] grid)
+    {
+        var counter = 0;
+        
+        for(int i = 0; i < grid.Length; i++)
+        {
+            for(int j = 0; j < grid[i].Length; j++)
+            {
+                var curr = grid[i][j];
+                
+                if(curr == 1) counter++;
+                else if(curr == 2) rottenOranges.Enqueue(new int[] {i, j});
+            }
+        }
+        
+        return counter;
+    }
 }
