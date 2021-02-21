@@ -1,0 +1,1 @@
+https://leetcode.com/problems/armstrong-number/ #1134
