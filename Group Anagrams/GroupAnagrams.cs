@@ -12,16 +12,11 @@ public class Solution
             Array.Sort(charArray);
             var sortedStr = new String(charArray);
             
-            if(!anagrams.ContainsKey(sortedStr))
-            {
-                anagrams[sortedStr] = new List<string>() {str};
-            }
-            else
-            {
-                anagrams[sortedStr].Add(str);
-            }
+            if(!anagrams.ContainsKey(sortedStr)) 
+                anagrams[sortedStr] = new List<string>();
+
+            anagrams[sortedStr].Add(str);
         }
-        
         
         return new List<IList<string>>(anagrams.Values);
     }
