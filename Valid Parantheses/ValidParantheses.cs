@@ -14,12 +14,10 @@ public class Solution {
             if(parentheses.ContainsKey(c)) 
             {
                 stack.Push(parentheses[c]);
+                continue;
             }
-            else
-            {
-                if(stack.Count > 0 && stack.Peek() == c) stack.Pop();
-                else return false;
-            }
+            
+            if(stack.Count == 0 || stack.Pop() != c) return false;
         }
         
         return stack.Count == 0;
