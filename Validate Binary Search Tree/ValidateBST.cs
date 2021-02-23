@@ -15,17 +15,15 @@ public class Solution
 {
     public bool IsValidBST(TreeNode root) 
     {
-        return IsValidBST(root, Int64.MinValue, Int64.MaxValue);  
+        return IsValidBST(root, Int64.MinValue, Int64.MaxValue);
     }
     
-    public bool IsValidBST(TreeNode root, long left, long right)
+    private bool IsValidBST(TreeNode node, double min, double max)
     {
-        if(root == null) return true;
+        if(node == null) return true;
         
-        var rootVal = (long) root.val;
+        var isValid = node.val > min && node.val < max;
         
-        var isNodeValid = left < rootVal && rootVal < right;
-        
-        return isNodeValid && IsValidBST(root.left, left, rootVal) && IsValidBST(root.right, rootVal, right);
+        return isValid && IsValidBST(node.left, min, node.val) && IsValidBST(node.right, node.val, max);
     }
 }
